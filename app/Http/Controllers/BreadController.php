@@ -14,17 +14,23 @@ class BreadController extends Controller
      */
     public function index()
     {
-        // Get all active bread types with their current week inventory
-        $breadTypes = BreadType::where('is_active', true)
-            ->with(['weeklyInventories' => function ($query) {
-                $query->where('is_active', true)
-                    ->where('order_deadline', '>', now())
-                    ->where('available_quantity', '>', 0);
-            }])
-            ->get();
+        // Get all active bread types
+        $breadTypes = BreadType::where('is_active', true)->get();
+
+        // Get all active weekly inventory items with their bread types
+        $weeklyInventory = WeeklyInventory::where('is_active', true)
+            ->where('order_deadline', '>', now())
+            ->with('breadType')
+            ->get()
+            ->map(function ($item) {
+                // Add available_count for easier access in the frontend
+                $item->available_count = $item->available_quantity;
+                return $item;
+            });
 
         return Inertia::render('Bread/Index', [
             'breadTypes' => $breadTypes,
+            'weeklyInventory' => $weeklyInventory,
         ]);
     }
 

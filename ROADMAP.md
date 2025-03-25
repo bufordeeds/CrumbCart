@@ -110,33 +110,33 @@
 
 **Tasks:**
 
--   [ ] Create main application layout
--   [ ] Design responsive navigation
--   [ ] Implement authentication state UI
--   [ ] Set up route transitions
--   [ ] Create reusable UI components
+-   [x] Create main application layout
+-   [x] Design responsive navigation
+-   [x] Implement authentication state UI
+-   [x] Set up route transitions
+-   [x] Create reusable UI components
 
 **Deliverables:**
 
--   [ ] Base application layout
--   [ ] Navigation system
--   [ ] Authentication UI elements
--   [ ] Reusable component library
+-   [x] Base application layout
+-   [x] Navigation system
+-   [x] Authentication UI elements
+-   [x] Reusable component library
 
 ### 3.2 Customer Dashboard (Week 5, Days 3-5)
 
 **Tasks:**
 
--   [ ] Build weekly bread display
--   [ ] Implement order placement UI
+-   [x] Build weekly bread display
+-   [x] Implement order placement UI
 -   [ ] Create order history view
 -   [ ] Add order cancellation functionality
 -   [ ] Develop user profile management
 
 **Deliverables:**
 
--   [ ] Customer dashboard
--   [ ] Order placement workflow
+-   [x] Customer dashboard
+-   [x] Order placement workflow
 -   [ ] Order history display
 -   [ ] Profile management
 

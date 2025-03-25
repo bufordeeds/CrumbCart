@@ -19,7 +19,22 @@ class OrderController extends Controller
             ->orders()
             ->with('weeklyInventory.breadType')
             ->latest()
-            ->paginate(10);
+            ->get()
+            ->map(function ($order) {
+                // Transform order data for the frontend
+                $breadType = $order->weeklyInventory->breadType;
+
+                // Create items array for display in the order card
+                $order->items = [
+                    [
+                        'bread_type' => $breadType,
+                        'quantity' => $order->quantity,
+                        'price' => $order->total_price,
+                    ]
+                ];
+
+                return $order;
+            });
 
         return Inertia::render('Orders/Index', [
             'orders' => $orders,
