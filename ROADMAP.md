@@ -8,7 +8,7 @@
 
 -   [x] Create new Laravel project with Inertia.js and React
 -   [x] Set up development environment (Laravel with SQLite)
--   [ ] Initialize Git repository
+-   [x] Initialize Git repository
 -   [x] Configure basic project structure
 -   [x] Install key packages (Laravel Breeze, Tailwind CSS)
 
@@ -16,7 +16,7 @@
 
 -   [x] Working local development environment
 -   [x] Project skeleton with Inertia.js + React
--   [ ] Repository with initial commit
+-   [x] Repository with initial commit
 
 ### 1.2 Authentication & Authorization (Week 1, Days 4-5)
 
@@ -129,18 +129,18 @@
 
 -   [x] Build weekly bread display
 -   [x] Implement order placement UI
--   [ ] Create order history view
--   [ ] Add order cancellation functionality
--   [ ] Develop user profile management
+-   [x] Create order history view
+-   [x] Add order cancellation functionality
+-   [x] Develop user profile management
 
 **Deliverables:**
 
 -   [x] Customer dashboard
 -   [x] Order placement workflow
--   [ ] Order history display
--   [ ] Profile management
+-   [x] Order history display
+-   [x] Profile management
 
-### 3.3 Admin Dashboard (Week 6, Days 1-5)
+### 3.3 Admin Dashboard (Week 6, Days 1-5) ← NEXT FOCUS
 
 **Tasks:**
 

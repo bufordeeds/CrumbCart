@@ -1,5 +1,5 @@
 import MainLayout from "@/Layouts/MainLayout";
-import { Head } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import Container from "@/Components/Container";
 import Card from "@/Components/Card";
 import Grid from "@/Components/Grid";
@@ -90,6 +90,15 @@ export default function OrdersIndex({ orders }) {
 
 // Order card component
 function OrderCard({ order }) {
+    const { delete: destroy, processing } = useForm();
+
+    // Handle order cancellation
+    const handleCancelOrder = (e) => {
+        e.preventDefault();
+        if (confirm("Are you sure you want to cancel this order?")) {
+            destroy(route("orders.destroy", order.id));
+        }
+    };
     // Status badge styling
     const getStatusBadge = (status) => {
         switch (status) {
@@ -150,11 +159,10 @@ function OrderCard({ order }) {
                 </Button>
                 {order.status === "pending" && (
                     <Button
-                        href={route("orders.destroy", order.id)}
-                        method="delete"
-                        as="button"
+                        onClick={handleCancelOrder}
                         variant="danger"
                         size="sm"
+                        disabled={processing}
                     >
                         Cancel Order
                     </Button>
