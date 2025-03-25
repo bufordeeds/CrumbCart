@@ -175,12 +175,8 @@ function BreadCard({ item, breadType }) {
                     disabled={!isAvailable}
                     variant="primary"
                     size="sm"
-                    href={isAvailable ? "#" : "#"}
-                    onClick={() =>
-                        isAvailable &&
-                        alert(
-                            "Order functionality will be implemented in the next phase"
-                        )
+                    href={
+                        isAvailable ? route("bread.show", breadType?.id) : "#"
                     }
                 >
                     Order Now

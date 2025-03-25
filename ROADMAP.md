@@ -162,6 +162,7 @@
 
 **Tasks:**
 
+-   [x] Create user-friendly landing page with personalized content
 -   [ ] Add form validations with feedback
 -   [ ] Implement loading states
 -   [ ] Create success/error notifications
@@ -170,6 +171,7 @@
 
 **Deliverables:**
 
+-   [x] Personalized landing page showcasing Casey's sourdough business
 -   [ ] Enhanced form validations
 -   [ ] Loading state indicators
 -   [ ] Toast notifications
