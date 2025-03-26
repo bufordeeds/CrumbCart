@@ -44,7 +44,6 @@ export default function AdminLayout({ header, children }) {
                                 <NavLink
                                     href={route("admin.dashboard")}
                                     active={route().current("admin.dashboard")}
-                                    className="text-white hover:text-amber-200"
                                 >
                                     Dashboard
                                 </NavLink>
@@ -53,7 +52,6 @@ export default function AdminLayout({ header, children }) {
                                     active={route().current(
                                         "admin.bread-types.*"
                                     )}
-                                    className="text-white hover:text-amber-200"
                                 >
                                     Bread Types
                                 </NavLink>
@@ -64,21 +62,16 @@ export default function AdminLayout({ header, children }) {
                                     active={route().current(
                                         "admin.weekly-inventories.*"
                                     )}
-                                    className="text-white hover:text-amber-200"
                                 >
                                     Inventory
                                 </NavLink>
                                 <NavLink
                                     href={route("admin.orders.index")}
                                     active={route().current("admin.orders.*")}
-                                    className="text-white hover:text-amber-200"
                                 >
                                     Orders
                                 </NavLink>
-                                <NavLink
-                                    href={route("dashboard")}
-                                    className="text-white hover:text-amber-200"
-                                >
+                                <NavLink href={route("dashboard")}>
                                     Customer View
                                 </NavLink>
                             </div>
@@ -182,14 +175,12 @@ export default function AdminLayout({ header, children }) {
                         <ResponsiveNavLink
                             href={route("admin.dashboard")}
                             active={route().current("admin.dashboard")}
-                            className="text-white hover:text-amber-200"
                         >
                             Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route("admin.bread-types.index")}
                             active={route().current("admin.bread-types.*")}
-                            className="text-white hover:text-amber-200"
                         >
                             Bread Types
                         </ResponsiveNavLink>
@@ -198,21 +189,16 @@ export default function AdminLayout({ header, children }) {
                             active={route().current(
                                 "admin.weekly-inventories.*"
                             )}
-                            className="text-white hover:text-amber-200"
                         >
                             Inventory
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route("admin.orders.index")}
                             active={route().current("admin.orders.*")}
-                            className="text-white hover:text-amber-200"
                         >
                             Orders
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route("dashboard")}
-                            className="text-white hover:text-amber-200"
-                        >
+                        <ResponsiveNavLink href={route("dashboard")}>
                             Customer View
                         </ResponsiveNavLink>
                     </div>
@@ -228,17 +214,13 @@ export default function AdminLayout({ header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink
-                                href={route("profile.index")}
-                                className="text-white hover:text-amber-200"
-                            >
+                            <ResponsiveNavLink href={route("profile.index")}>
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
                                 href={route("logout")}
                                 as="button"
-                                className="text-white hover:text-amber-200"
                             >
                                 Log Out
                             </ResponsiveNavLink>
