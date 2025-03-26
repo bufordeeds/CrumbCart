@@ -483,9 +483,9 @@ export default function BreadShow({ breadType }) {
                                                     Pickup Location
                                                 </h3>
                                                 <p className="mt-1 text-gray-700">
-                                                    123 Bakery Street
+                                                    Lizaso Residence
                                                     <br />
-                                                    Austin, TX 78701
+                                                    San Antonio, TX 78253
                                                 </p>
                                             </div>
 
@@ -494,9 +494,21 @@ export default function BreadShow({ breadType }) {
                                                     Pickup Hours
                                                 </h3>
                                                 <p className="mt-1 text-gray-700">
-                                                    Saturday: 9:00 AM - 12:00 PM
+                                                    Saturday: 9:00 AM - 5:00 PM
                                                     <br />
-                                                    Sunday: 10:00 AM - 1:00 PM
+                                                    Sunday: 10:00 AM - 4:00 PM
+                                                </p>
+                                            </div>
+
+                                            <div>
+                                                <h3 className="text-sm font-medium text-gray-500">
+                                                    Delivery Option
+                                                </h3>
+                                                <p className="mt-1 text-gray-700">
+                                                    Leave your phone number in
+                                                    the order notes if you'd
+                                                    like to coordinate delivery
+                                                    instead of pickup.
                                                 </p>
                                             </div>
                                         </div>
