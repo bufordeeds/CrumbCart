@@ -117,7 +117,7 @@ export default function OrderShow({ order }) {
                                             </h3>
                                             <p className="mt-1 text-lg font-medium">
                                                 $
-                                                {parseFloat(
+                                                {Number(
                                                     order.weekly_inventory
                                                         .bread_type.price
                                                 ).toFixed(2)}{" "}
@@ -131,7 +131,7 @@ export default function OrderShow({ order }) {
                                             </h3>
                                             <p className="mt-1 text-xl font-bold">
                                                 $
-                                                {parseFloat(
+                                                {Number(
                                                     order.total_price
                                                 ).toFixed(2)}
                                             </p>

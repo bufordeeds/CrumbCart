@@ -123,7 +123,7 @@ export default function BreadTypesIndex({ breadTypes }) {
                                                     </td>
                                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                                                         $
-                                                        {parseFloat(
+                                                        {Number(
                                                             breadType.price
                                                         ).toFixed(2)}
                                                     </td>

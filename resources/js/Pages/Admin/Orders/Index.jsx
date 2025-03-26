@@ -167,7 +167,7 @@ export default function OrdersIndex({ orders, filters }) {
                                                         <div className="text-sm text-gray-500">
                                                             Qty:{" "}
                                                             {order.quantity} | $
-                                                            {parseFloat(
+                                                            {Number(
                                                                 order.total_price
                                                             ).toFixed(2)}
                                                         </div>

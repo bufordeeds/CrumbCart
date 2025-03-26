@@ -47,7 +47,7 @@ export default function BreadShow({ breadType }) {
 
     // Calculate total price
     const calculateTotal = () => {
-        return (breadType.price * data.quantity).toFixed(2);
+        return (Number(breadType.price) * data.quantity).toFixed(2);
     };
 
     // Handle form submission
@@ -153,7 +153,7 @@ export default function BreadShow({ breadType }) {
                                         <Card.Description>
                                             <div className="text-lg font-bold text-amber-800 mb-2">
                                                 $
-                                                {parseFloat(
+                                                {Number(
                                                     breadType.price
                                                 ).toFixed(2)}
                                             </div>
