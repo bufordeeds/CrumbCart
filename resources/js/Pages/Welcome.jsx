@@ -181,7 +181,9 @@ export default function Welcome({ auth, breadTypes = [] }) {
                                             <div className="mb-4 text-lg font-bold text-amber-800">
                                                 $
                                                 {breadType.price
-                                                    ? breadType.price.toFixed(2)
+                                                    ? Number(
+                                                          breadType.price
+                                                      ).toFixed(2)
                                                     : "0.00"}
                                             </div>
                                         </Card.Content>

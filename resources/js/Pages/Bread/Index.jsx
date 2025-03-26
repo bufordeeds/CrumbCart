@@ -349,7 +349,7 @@ function BreadCard({ item, breadType }) {
             <Card.Content>
                 <div className="mb-4 flex items-center justify-between">
                     <div className="text-lg font-bold text-amber-800">
-                        ${item.price ? item.price.toFixed(2) : "0.00"}
+                        ${item.price ? Number(item.price).toFixed(2) : "0.00"}
                     </div>
                     <div className="text-sm text-gray-500">
                         {isAvailable

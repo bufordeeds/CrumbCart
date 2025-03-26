@@ -126,7 +126,10 @@ export default function OrdersShow({ order }) {
                                                 Total Price
                                             </h3>
                                             <p className="mt-2 text-lg font-medium text-gray-900">
-                                                ${order.total_price.toFixed(2)}
+                                                $
+                                                {Number(
+                                                    order.total_price
+                                                ).toFixed(2)}
                                             </p>
                                         </div>
                                         {order.notes && (
@@ -226,9 +229,10 @@ export default function OrdersShow({ order }) {
                                         </h3>
                                         <p className="mt-2 text-lg text-gray-900">
                                             $
-                                            {order.weekly_inventory.bread_type.price.toFixed(
-                                                2
-                                            )}
+                                            {Number(
+                                                order.weekly_inventory
+                                                    .bread_type.price
+                                            ).toFixed(2)}
                                         </p>
                                     </div>
                                     <div>

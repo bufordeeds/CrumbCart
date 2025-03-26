@@ -24,6 +24,16 @@ class BreadType extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'price' => 'float',
+        'is_active' => 'boolean',
+    ];
+
+    /**
      * Get the weekly inventories for the bread type.
      */
     public function weeklyInventories(): HasMany

@@ -139,13 +139,13 @@ function OrderCard({ order }) {
                             <div key={index} className="flex justify-between">
                                 <span>{item.bread_type?.name || "Bread"}</span>
                                 <span className="font-medium">
-                                    ${parseFloat(item.price).toFixed(2)}
+                                    ${Number(item.price).toFixed(2)}
                                 </span>
                             </div>
                         ))}
                     <div className="border-t border-gray-200 pt-2 mt-2 flex justify-between font-bold">
                         <span>Total</span>
-                        <span>${parseFloat(order.total_price).toFixed(2)}</span>
+                        <span>${Number(order.total_price).toFixed(2)}</span>
                     </div>
                 </div>
             </Card.Content>

@@ -32,6 +32,8 @@ class Order extends Model
      */
     protected $casts = [
         'pickup_date' => 'date',
+        'total_price' => 'float',
+        'quantity' => 'integer',
     ];
 
     /**
