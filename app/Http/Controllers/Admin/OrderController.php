@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\WeeklyInventory;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -78,9 +81,10 @@ class OrderController extends Controller
         $totalPrice = $weeklyInventory->breadType->price * $validated['quantity'];
 
         // Create the order within a transaction
-        DB::transaction(function () use ($validated, $weeklyInventory, $totalPrice) {
+        $order = null;
+        DB::transaction(function () use ($validated, $weeklyInventory, $totalPrice, &$order) {
             // Create the order
-            Order::create([
+            $order = Order::create([
                 'user_id' => $validated['user_id'],
                 'weekly_inventory_id' => $validated['weekly_inventory_id'],
                 'quantity' => $validated['quantity'],
@@ -93,6 +97,33 @@ class OrderController extends Controller
             // Update the available quantity
             $weeklyInventory->decrement('available_quantity', $validated['quantity']);
         });
+
+        // Send notification about the new order
+        if ($order) {
+            Log::info('Sending order notification from AdminOrderController', [
+                'order_id' => $order->id,
+                'user_id' => $order->user_id,
+                'total_price' => $order->total_price,
+                'recipients' => ['bufordeeds8@gmail.com', 'casey.lizaso@gmail.com']
+            ]);
+
+            try {
+                Notification::route('mail', [
+                    'bufordeeds8@gmail.com' => 'Buford Eeds',
+                    'casey.lizaso@gmail.com' => 'Casey Lizaso'
+                ])->notify(new NewOrderNotification($order));
+
+                Log::info('Order notification sent successfully from admin', [
+                    'order_id' => $order->id
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Failed to send order notification from admin', [
+                    'order_id' => $order->id,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        }
 
         return redirect()->route('admin.orders.index')
             ->with('success', 'Order created successfully.');

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\WeeklyInventory;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -85,7 +88,8 @@ class OrderController extends Controller
         $totalPrice = $weeklyInventory->breadType->price * $validated['quantity'];
 
         // Create the order within a transaction
-        DB::transaction(function () use ($request, $validated, $weeklyInventory, $totalPrice) {
+        $order = null;
+        DB::transaction(function () use ($request, $validated, $weeklyInventory, $totalPrice, &$order) {
             // Create the order
             $order = $request->user()->orders()->create([
                 'weekly_inventory_id' => $validated['weekly_inventory_id'],
@@ -99,6 +103,86 @@ class OrderController extends Controller
             // Update the available quantity
             $weeklyInventory->decrement('available_quantity', $validated['quantity']);
         });
+
+        // Send emails about the new order
+        if ($order) {
+            // 1. Send notification to admins
+            Log::info('Sending order notification to admins', [
+                'order_id' => $order->id,
+                'user_id' => $order->user_id,
+                'total_price' => $order->total_price,
+                'recipients' => ['bufordeeds8@gmail.com', 'casey.lizaso@gmail.com']
+            ]);
+
+            try {
+                // Create a simple HTML email with order details for admins
+                $breadType = $order->weeklyInventory->breadType->name;
+                $quantity = $order->quantity;
+                $totalPrice = '$' . number_format($order->total_price, 2);
+                $pickupDate = $order->pickup_date->format('F j, Y');
+                $customerName = $order->user->name;
+                $customerEmail = $order->user->email;
+                $orderUrl = url('/admin/orders/' . $order->id);
+
+                $adminHtml = "
+                    <h1>New Order Alert!</h1>
+                    <p>A new order has been placed by {$customerName} ({$customerEmail}).</p>
+                    <p><strong>Order Details:</strong></p>
+                    <ul>
+                        <li>Bread Type: {$breadType}</li>
+                        <li>Quantity: {$quantity}</li>
+                        <li>Total Price: {$totalPrice}</li>
+                        <li>Pickup Date: {$pickupDate}</li>
+                        " . ($order->notes ? "<li>Notes: {$order->notes}</li>" : "") . "
+                    </ul>
+                    <p><a href='{$orderUrl}'>View Order Details</a></p>
+                    <p>Thank you for using Crumb Cart!</p>
+                ";
+
+                // Send admin notification email
+                \Illuminate\Support\Facades\Mail::to(['bufordeeds8@gmail.com', 'casey.lizaso@gmail.com'])
+                    ->send(new class($adminHtml, $order->id) extends \Illuminate\Mail\Mailable {
+                    public $html;
+                    public $orderId;
+
+                    public function __construct($html, $orderId) {
+                        $this->html = $html;
+                        $this->orderId = $orderId;
+                    }
+
+                    public function build() {
+                        return $this->from(config('mail.from.address'), config('mail.from.name'))
+                            ->subject('New Order Placed - #' . $this->orderId)
+                            ->html($this->html);
+                    }
+                });
+
+                Log::info('Admin notification email sent successfully', [
+                    'order_id' => $order->id
+                ]);
+
+                // 2. Send confirmation email to customer
+                Log::info('Sending order confirmation to customer', [
+                    'order_id' => $order->id,
+                    'customer_email' => $order->user->email
+                ]);
+
+                // Send customer confirmation email
+                \Illuminate\Support\Facades\Mail::to([$order->user->email])
+                    ->send(new \App\Mail\OrderConfirmationMail($order));
+
+                Log::info('Customer confirmation email sent successfully', [
+                    'order_id' => $order->id,
+                    'customer_email' => $order->user->email
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Failed to send order emails', [
+                    'order_id' => $order->id,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        }
 
         return redirect()->route('orders.index')->with('success', 'Order placed successfully!');
     }
