@@ -31,10 +31,10 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Get low inventory items
+        // Get low inventory items with a lower threshold (1 instead of 5)
         $lowInventory = WeeklyInventory::with('breadType')
             ->where('is_active', true)
-            ->where('available_quantity', '<', 5)
+            ->where('available_quantity', '<', 1) // Changed from 5 to 1 to match lower production volume
             ->where('order_deadline', '>', now())
             ->get();
 

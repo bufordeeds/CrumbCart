@@ -1,29 +1,38 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import Button from "@/Components/Button";
+import TextInput from "@/Components/TextInput";
+import GuestLayout from "@/Layouts/GuestLayout";
+import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+        post(route("register"), {
+            onFinish: () => reset("password", "password_confirmation"),
         });
     };
 
     return (
         <GuestLayout>
             <Head title="Register" />
+
+            <div className="mb-6 text-center">
+                <h2 className="text-2xl font-bold text-amber-800">
+                    Create Your Account
+                </h2>
+                <p className="mt-2 text-gray-600">
+                    Join us to order fresh sourdough bread for weekly pickup
+                </p>
+            </div>
 
             <form onSubmit={submit}>
                 <div>
@@ -36,7 +45,7 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="name"
                         isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={(e) => setData("name", e.target.value)}
                         required
                     />
 
@@ -53,7 +62,7 @@ export default function Register() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
+                        onChange={(e) => setData("email", e.target.value)}
                         required
                     />
 
@@ -70,7 +79,7 @@ export default function Register() {
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
+                        onChange={(e) => setData("password", e.target.value)}
                         required
                     />
 
@@ -91,7 +100,7 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="new-password"
                         onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
+                            setData("password_confirmation", e.target.value)
                         }
                         required
                     />
@@ -102,17 +111,36 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                <div className="mt-6 flex flex-col space-y-4">
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        size="lg"
+                        fullWidth
+                        disabled={processing}
                     >
-                        Already registered?
-                    </Link>
+                        Create Account
+                    </Button>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
+                    <div className="text-center">
+                        <Link
+                            href={route("login")}
+                            className="text-sm text-amber-700 hover:text-amber-900 focus:outline-none"
+                        >
+                            Already have an account? Sign in
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="mt-6 rounded-md bg-amber-50 p-4">
+                    <h3 className="text-sm font-medium text-amber-800">
+                        What to expect after registration:
+                    </h3>
+                    <ul className="mt-2 list-disc pl-5 text-xs text-gray-600">
+                        <li>Browse our weekly bread selection</li>
+                        <li>Place orders by Wednesday for Saturday pickup</li>
+                        <li>Manage your orders and view your order history</li>
+                    </ul>
                 </div>
             </form>
         </GuestLayout>
