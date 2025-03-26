@@ -165,28 +165,152 @@ export default function BreadShow({ breadType }) {
                                         </div>
 
                                         {currentInventory && (
-                                            <div className="mt-4 text-sm text-gray-500">
-                                                <p>
-                                                    <strong>Bake Date:</strong>{" "}
-                                                    {new Date(
-                                                        currentInventory.bake_date
-                                                    ).toLocaleDateString()}
-                                                </p>
-                                                <p>
-                                                    <strong>
-                                                        Order Deadline:
-                                                    </strong>{" "}
-                                                    {new Date(
-                                                        currentInventory.order_deadline
-                                                    ).toLocaleString()}
-                                                </p>
-                                                <p>
-                                                    <strong>Available:</strong>{" "}
-                                                    {
-                                                        currentInventory.available_quantity
-                                                    }{" "}
-                                                    loaves
-                                                </p>
+                                            <div className="mt-4 rounded-md bg-amber-50 p-3 text-sm">
+                                                <div className="flex items-center text-amber-800 mb-2">
+                                                    <svg
+                                                        className="mr-2 h-4 w-4"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                        />
+                                                    </svg>
+                                                    <span className="font-medium">
+                                                        Fresh Weekly Batch
+                                                    </span>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <div className="flex items-center">
+                                                        <div className="w-32 font-semibold">
+                                                            Bake Date:
+                                                        </div>
+                                                        <div>
+                                                            {new Date(
+                                                                currentInventory.bake_date
+                                                            ).toLocaleDateString(
+                                                                undefined,
+                                                                {
+                                                                    weekday:
+                                                                        "long",
+                                                                    month: "short",
+                                                                    day: "numeric",
+                                                                }
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-center">
+                                                        <div className="w-32 font-semibold">
+                                                            Order By:
+                                                        </div>
+                                                        <div>
+                                                            {new Date(
+                                                                currentInventory.order_deadline
+                                                            ).toLocaleDateString(
+                                                                undefined,
+                                                                {
+                                                                    weekday:
+                                                                        "long",
+                                                                    month: "short",
+                                                                    day: "numeric",
+                                                                    hour: "numeric",
+                                                                    minute: "numeric",
+                                                                }
+                                                            )}
+
+                                                            {/* Countdown badge */}
+                                                            {new Date() <
+                                                                new Date(
+                                                                    currentInventory.order_deadline
+                                                                ) && (
+                                                                <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                                                                    {Math.ceil(
+                                                                        (new Date(
+                                                                            currentInventory.order_deadline
+                                                                        ) -
+                                                                            new Date()) /
+                                                                            (1000 *
+                                                                                60 *
+                                                                                60 *
+                                                                                24)
+                                                                    )}{" "}
+                                                                    {Math.ceil(
+                                                                        (new Date(
+                                                                            currentInventory.order_deadline
+                                                                        ) -
+                                                                            new Date()) /
+                                                                            (1000 *
+                                                                                60 *
+                                                                                60 *
+                                                                                24)
+                                                                    ) === 1
+                                                                        ? "day"
+                                                                        : "days"}{" "}
+                                                                    left
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-center">
+                                                        <div className="w-32 font-semibold">
+                                                            Pickup Date:
+                                                        </div>
+                                                        <div>
+                                                            {new Date(
+                                                                new Date(
+                                                                    currentInventory.bake_date
+                                                                ).getTime() +
+                                                                    86400000
+                                                            ).toLocaleDateString(
+                                                                undefined,
+                                                                {
+                                                                    weekday:
+                                                                        "long",
+                                                                    month: "short",
+                                                                    day: "numeric",
+                                                                }
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-center">
+                                                        <div className="w-32 font-semibold">
+                                                            Available:
+                                                        </div>
+                                                        <div className="flex items-center">
+                                                            <span className="font-bold text-amber-800 mr-1">
+                                                                {
+                                                                    currentInventory.available_quantity
+                                                                }
+                                                            </span>
+                                                            loaves
+                                                            {currentInventory.available_quantity <=
+                                                                3 && (
+                                                                <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                                                                    Low Stock
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-3 pt-3 border-t border-amber-200">
+                                                    <p className="text-amber-800">
+                                                        <span className="font-semibold">
+                                                            Freshly Baked:
+                                                        </span>{" "}
+                                                        Each loaf is handcrafted
+                                                        and baked fresh for this
+                                                        week's batch.
+                                                    </p>
+                                                </div>
                                             </div>
                                         )}
                                     </Card.Content>

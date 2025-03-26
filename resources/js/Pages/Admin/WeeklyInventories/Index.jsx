@@ -1,11 +1,55 @@
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
+import { useState, useEffect } from "react";
 import Container from "@/Components/Container";
 import Card from "@/Components/Card";
 import Button from "@/Components/Button";
 import Badge from "@/Components/Badge";
 
 export default function WeeklyInventoriesIndex({ weeklyInventories }) {
+    const [errorMessage, setErrorMessage] = useState(null);
+
+    // Listen for Inertia error events
+    useEffect(() => {
+        const handleError = (event) => {
+            if (
+                event.detail.errors &&
+                Object.keys(event.detail.errors).length > 0
+            ) {
+                // Extract error message
+                const errorMsg = Object.values(event.detail.errors)[0];
+                setErrorMessage(errorMsg);
+            }
+        };
+
+        document.addEventListener("inertia:error", handleError);
+
+        return () => {
+            document.removeEventListener("inertia:error", handleError);
+        };
+    }, []);
+
+    const handleDelete = (id) => {
+        // Clear any previous error messages
+        setErrorMessage(null);
+
+        // Use Inertia router to handle the delete request
+        router.delete(route("admin.weekly-inventories.destroy", id), {
+            preserveScroll: true,
+            onError: (errors) => {
+                // This will be called if there's an error
+                console.error("Delete errors:", errors);
+                if (errors.message) {
+                    setErrorMessage(errors.message);
+                } else {
+                    setErrorMessage(
+                        "Cannot delete inventory with associated orders."
+                    );
+                }
+            },
+        });
+    };
+
     // Format date
     const formatDate = (dateString) => {
         const options = { month: "short", day: "numeric", year: "numeric" };
@@ -20,6 +64,54 @@ export default function WeeklyInventoriesIndex({ weeklyInventories }) {
                 </h2>
             }
         >
+            {/* Error message display */}
+            {errorMessage && (
+                <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+                    <div className="rounded-md bg-red-50 p-4">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <svg
+                                    className="h-5 w-5 text-red-400"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm font-medium text-red-800">
+                                    {errorMessage}
+                                </p>
+                            </div>
+                            <div className="ml-auto pl-3">
+                                <div className="-mx-1.5 -my-1.5">
+                                    <button
+                                        onClick={() => setErrorMessage(null)}
+                                        className="inline-flex rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none"
+                                    >
+                                        <span className="sr-only">Dismiss</span>
+                                        <svg
+                                            className="h-5 w-5"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
             <Head title="Weekly Inventory" />
 
             <div className="py-8">
@@ -142,21 +234,12 @@ export default function WeeklyInventoriesIndex({ weeklyInventories }) {
                                                             , {inventory.year}
                                                         </td>
                                                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                                                            <div className="flex flex-col">
-                                                                <span>
-                                                                    Available:{" "}
-                                                                    {
-                                                                        inventory.available_quantity
-                                                                    }
-                                                                </span>
-                                                                {inventory.available_quantity <
-                                                                    5 && (
-                                                                    <span className="text-xs text-red-500 font-medium">
-                                                                        Low
-                                                                        Stock!
-                                                                    </span>
-                                                                )}
-                                                            </div>
+                                                            <span>
+                                                                Available:{" "}
+                                                                {
+                                                                    inventory.available_quantity
+                                                                }
+                                                            </span>
                                                         </td>
                                                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                                                             <div className="flex flex-col">
@@ -205,28 +288,16 @@ export default function WeeklyInventoriesIndex({ weeklyInventories }) {
                                                                 >
                                                                     Edit
                                                                 </Link>
-                                                                <Link
-                                                                    href={route(
-                                                                        "admin.weekly-inventories.destroy",
-                                                                        inventory.id
-                                                                    )}
-                                                                    method="delete"
-                                                                    as="button"
+                                                                <button
+                                                                    onClick={() =>
+                                                                        handleDelete(
+                                                                            inventory.id
+                                                                        )
+                                                                    }
                                                                     className="text-red-600 hover:text-red-900"
-                                                                    onClick={(
-                                                                        e
-                                                                    ) => {
-                                                                        if (
-                                                                            !confirm(
-                                                                                "Are you sure you want to delete this inventory?"
-                                                                            )
-                                                                        ) {
-                                                                            e.preventDefault();
-                                                                        }
-                                                                    }}
                                                                 >
                                                                     Delete
-                                                                </Link>
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>

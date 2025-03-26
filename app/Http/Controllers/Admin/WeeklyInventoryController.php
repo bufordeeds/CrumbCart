@@ -89,6 +89,9 @@ class WeeklyInventoryController extends Controller
      */
     public function edit(WeeklyInventory $weeklyInventory)
     {
+        // Load the bread type relationship
+        $weeklyInventory->load('breadType');
+
         $breadTypes = BreadType::where('is_active', true)
             ->orderBy('name')
             ->get();
@@ -126,15 +129,34 @@ class WeeklyInventoryController extends Controller
      */
     public function destroy(WeeklyInventory $weeklyInventory)
     {
-        // Check if the weekly inventory has any orders
-        if ($weeklyInventory->orders()->exists()) {
-            return back()->with('error', 'Cannot delete inventory with associated orders.');
+        try {
+            // Load the orders relationship
+            $weeklyInventory->load('orders');
+
+            // Check if the weekly inventory has any orders
+            if ($weeklyInventory->orders->count() > 0) {
+                // Log the order count for debugging
+                \Log::info('Cannot delete inventory #' . $weeklyInventory->id . ' - Has ' . $weeklyInventory->orders->count() . ' orders');
+
+                // Return error in a format Inertia.js can understand
+                return back()->withErrors([
+                    'message' => 'Cannot delete inventory with associated orders.',
+                ]);
+            }
+
+            // Delete the weekly inventory
+            $weeklyInventory->delete();
+
+            \Log::info('Successfully deleted inventory #' . $weeklyInventory->id);
+
+            return redirect()->route('admin.weekly-inventories.index')
+                ->with('success', 'Weekly inventory deleted successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting inventory #' . $weeklyInventory->id . ': ' . $e->getMessage());
+
+            return back()->withErrors([
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ]);
         }
-
-        // Delete the weekly inventory
-        $weeklyInventory->delete();
-
-        return redirect()->route('admin.weekly-inventories.index')
-            ->with('success', 'Weekly inventory deleted successfully.');
     }
 }
